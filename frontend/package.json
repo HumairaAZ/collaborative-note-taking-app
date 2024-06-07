@@ -1,6 +1,7 @@
 {
   "name": "collaborative-note-taking-app",
   "version": "1.0.0",
+  "homepage" : "https://humairaazmi.github.io/collaborative-note-taking-app"
   "private": true,
   "dependencies": {
     "react": "^17.0.2",
@@ -21,6 +22,6 @@
   "scripts": {
     "start": "webpack serve --mode development --open",
     "build": "webpack --mode production",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist -r https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
   }
 }
