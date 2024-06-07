@@ -30,6 +30,13 @@ jobs:
       run: npm install
       working-directory: ./frontend
 
+    - name: List repository files
+      run: ls -R
+
+    - name: List frontend files
+      run: cd frontend && ls -R
+
+
     - name: Build project
       run: npm run build
       working-directory: ./frontend
