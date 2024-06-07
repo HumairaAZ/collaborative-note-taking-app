@@ -26,14 +26,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: List repository files
+    - name: List root directory contents
       run: ls -R
+
+    - name: List frontend directory contents
+      run: ls -R frontend
 
     - name: Install dependencies
       run: cd frontend && npm install
-
-    - name: List frontend files
-      run: cd frontend && ls -R
 
     - name: Build project
       run: cd frontend && npm run build
