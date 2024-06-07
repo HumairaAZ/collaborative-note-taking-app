@@ -1,7 +1,7 @@
 {
   "name": "collaborative-note-taking-app",
   "version": "1.0.0",
-  "homepage" : "https://humairaazmi.github.io/collaborative-note-taking-app"
+  "homepage" : "https://humairaazmi.github.io/collaborative-note-taking-app",
   "private": true,
   "dependencies": {
     "react": "^17.0.2",
