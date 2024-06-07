@@ -1,18 +1,23 @@
-// /frontend/src/App.tsx
 import React from 'react';
-import NotesProvider from './context/NotesContext';
+import { Container, AppBar, Toolbar, Typography, Button } from '@material-ui/core';
 import Note from './components/Note';
+import NotesProvider from './context/NotesContext';
 
 const App: React.FC = () => {
   return (
     <NotesProvider>
-      <div className="App">
-        <h1>Collaborative Note-Taking App</h1>
+      <Container>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6">
+              Collaborative Note-Taking App
+            </Typography>
+          </Toolbar>
+        </AppBar>
         <Note />
-      </div>
+      </Container>
     </NotesProvider>
   );
 };
 
 export default App;
-
