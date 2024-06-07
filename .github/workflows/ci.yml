@@ -26,27 +26,22 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies
-      run: npm install
-      working-directory: ./frontend
-
     - name: List repository files
       run: ls -R
+
+    - name: Install dependencies
+      run: cd frontend && npm install
 
     - name: List frontend files
       run: cd frontend && ls -R
 
-
     - name: Build project
-      run: npm run build
-      working-directory: ./frontend
+      run: cd frontend && npm run build
 
     - name: Run tests
-      run: npm test
-      working-directory: ./frontend
+      run: cd frontend && npm test
 
     - name: Deploy to GitHub Pages
-      run: npm run deploy
-      working-directory: ./frontend
+      run: cd frontend && npm run deploy
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
