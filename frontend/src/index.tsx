@@ -1,4 +1,4 @@
-// /frontend/src/index.tsx
+// /frontend/src/index.tsxd
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';

@@ -1,4 +1,3 @@
-// /frontend/src/__tests__/Note.test.tsx
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import Note from '../components/Note';
@@ -27,4 +26,6 @@ test('updates a note', () => {
   fireEvent.click(getByText('Add Note'));
 
   const textarea = getAllByRole('textbox')[0];
-  fireEvent.change(textarea, { target:
+  fireEvent.change(textarea, { target: { value: 'Updated note' } });
+  expect(textarea.value).toBe('Updated note');
+});
