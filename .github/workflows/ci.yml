@@ -32,6 +32,13 @@ jobs:
     - name: Build project
       run: cd frontend && npm run build
 
+    - name: Configure Git
+      run: |
+        git config --global user.email "humairaazmi100.com"
+        git config --global user.name "humairaazmi"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Deploy to GitHub Pages
       run: cd frontend && npm run deploy
       env:
