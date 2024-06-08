@@ -58,8 +58,8 @@ const Note: React.FC = () => {
     });
   };
 
-  const updateNote = (id: string, content: string, tags: string[]) => {
-    db.collection('notes').doc(id).update({ content, tags });
+  const updateNoteContent = (id: string, content: string) => {
+    db.collection('notes').doc(id).update({ content });
   };
 
   const deleteNote = (id: string) => {
@@ -107,7 +107,7 @@ const Note: React.FC = () => {
                 fullWidth
                 variant="outlined"
                 value={note.content}
-                onChange={(e) => updateNote(note.id, e.target.value, note.tags)}
+                onChange={(e) => updateNoteContent(note.id, e.target.value)}
                 aria-label="Note content"
                 inputProps={{ style: { color: '#333' } }}
                 onFocus={() => handleFocus(note.id)}
