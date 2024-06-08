@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Grid, CircularProgress, Fade, IconButton, Chip, Box } from '@material-ui/core';
+import { Button, TextField, Grid, CircularProgress, Fade, IconButton, Chip, Box, Tooltip } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
-import { db } from '../firebase';
+import { db, auth } from '../firebase';
 import firebase from 'firebase/app';
 
 const Note: React.FC = () => {
-  const [notes, setNotes] = useState<{ id: string, content: string, tags: string[] }[]>([]);
+  const [notes, setNotes] = useState<{ id: string, content: string, tags: string[], editingUsers: string[] }[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const unsubscribe = db.collection('notes').orderBy('timestamp', 'asc').onSnapshot(snapshot => {
@@ -14,10 +15,16 @@ const Note: React.FC = () => {
         id: doc.id,
         content: doc.data().content || '',
         tags: doc.data().tags || [],
+        editingUsers: doc.data().editingUsers || []
       }));
       setNotes(notesData);
       setLoading(false);
     });
+
+    auth.onAuthStateChanged(user => {
+      setCurrentUser(user ? user.uid : null);
+    });
+
     return () => unsubscribe();
   }, []);
 
@@ -25,6 +32,7 @@ const Note: React.FC = () => {
     db.collection('notes').add({
       content: '',
       tags: [],
+      editingUsers: [],
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
   };
@@ -53,6 +61,24 @@ const Note: React.FC = () => {
     }
   };
 
+  const handleFocus = (id: string) => {
+    if (currentUser) {
+      const noteRef = db.collection('notes').doc(id);
+      noteRef.update({
+        editingUsers: firebase.firestore.FieldValue.arrayUnion(currentUser)
+      });
+    }
+  };
+
+  const handleBlur = (id: string) => {
+    if (currentUser) {
+      const noteRef = db.collection('notes').doc(id);
+      noteRef.update({
+        editingUsers: firebase.firestore.FieldValue.arrayRemove(currentUser)
+      });
+    }
+  };
+
   return (
     <Grid container spacing={2}>
       {loading && <CircularProgress />}
@@ -67,6 +93,8 @@ const Note: React.FC = () => {
                 onChange={(e) => updateNote(note.id, e.target.value, note.tags)}
                 aria-label="Note content"
                 inputProps={{ style: { color: '#333' } }}
+                onFocus={() => handleFocus(note.id)}
+                onBlur={() => handleBlur(note.id)}
               />
               <IconButton aria-label="Delete note" onClick={() => deleteNote(note.id)}>
                 <DeleteIcon />
@@ -92,6 +120,13 @@ const Note: React.FC = () => {
                 }}
               />
             </Box>
+            {note.editingUsers.length > 0 && (
+              <Box mt={1}>
+                <Tooltip title="Currently editing">
+                  <Chip label={`Editing by ${note.editingUsers.length} user(s)`} color="secondary" />
+                </Tooltip>
+              </Box>
+            )}
           </Grid>
         </Fade>
       ))}
