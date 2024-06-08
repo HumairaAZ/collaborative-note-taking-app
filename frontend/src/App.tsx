@@ -3,7 +3,7 @@ import { Container, AppBar, Toolbar, Typography, CssBaseline, CircularProgress }
 import { ThemeProvider, createTheme, makeStyles } from '@material-ui/core/styles';
 import NotesProvider from './context/NotesContext';
 
-// Correct the lazy import
+
 const Note = lazy(() => import('./components/Note'));
 
 const theme = createTheme({
