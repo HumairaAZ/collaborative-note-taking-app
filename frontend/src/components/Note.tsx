@@ -1,10 +1,8 @@
-import React, { useEffect, useState, lazy, Suspense } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextField, Grid, CircularProgress, Fade, IconButton } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { db } from '../firebase';
 import firebase from 'firebase/app';
-
-const NoteComponent = lazy(() => import('./NoteComponent')); // Example of lazy loading a nested component
 
 const Note: React.FC = () => {
   const [notes, setNotes] = useState<{ id: string, content: string }[]>([]);
