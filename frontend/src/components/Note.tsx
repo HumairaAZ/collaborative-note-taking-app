@@ -1,18 +1,33 @@
-import React, { useState } from 'react';
-import { Button, TextField, Grid, Snackbar, CircularProgress } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
-import { useNotes } from '../hooks/useNotes';
+import React, { useEffect, useState } from 'react';
+import { Button, TextField, Grid, CircularProgress } from '@material-ui/core';
+import { db } from '../firebase';
+import firebase from 'firebase/app';
 
 const Note: React.FC = () => {
-  const { notes, addNote, updateNote } = useNotes();
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [notes, setNotes] = useState<{ id: string, content: string }[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleAddNote = () => {
-    setLoading(true);
-    addNote();
-    setLoading(false);
-    setMessage('Note added successfully!');
+  useEffect(() => {
+    const unsubscribe = db.collection('notes').orderBy('timestamp', 'asc').onSnapshot(snapshot => {
+      const notesData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setNotes(notesData);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const addNote = () => {
+    db.collection('notes').add({
+      content: '',
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  };
+
+  const updateNote = (id: string, content: string) => {
+    db.collection('notes').doc(id).update({ content });
   };
 
   return (
@@ -29,15 +44,10 @@ const Note: React.FC = () => {
         </Grid>
       ))}
       <Grid item xs={12}>
-        <Button variant="contained" color="primary" onClick={handleAddNote}>
+        <Button variant="contained" color="primary" onClick={addNote}>
           Add Note
         </Button>
       </Grid>
-      <Snackbar open={Boolean(message)} autoHideDuration={6000} onClose={() => setMessage('')}>
-        <Alert onClose={() => setMessage('')} severity="success">
-          {message}
-        </Alert>
-      </Snackbar>
     </Grid>
   );
 };
