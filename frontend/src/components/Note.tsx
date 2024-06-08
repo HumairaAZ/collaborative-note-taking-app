@@ -11,7 +11,7 @@ const Note: React.FC = () => {
     const unsubscribe = db.collection('notes').orderBy('timestamp', 'asc').onSnapshot(snapshot => {
       const notesData = snapshot.docs.map(doc => ({
         id: doc.id,
-        content: doc.data().content || '' // Ensure content field is present
+        content: doc.data().content || ''
       }));
       setNotes(notesData);
       setLoading(false);
@@ -34,7 +34,7 @@ const Note: React.FC = () => {
     <Grid container spacing={2}>
       {loading && <CircularProgress />}
       {notes.map((note) => (
-        <Grid item xs={12} key={note.id}>
+        <Grid item xs={12} sm={6} md={4} key={note.id}>
           <TextField
             fullWidth
             variant="outlined"
