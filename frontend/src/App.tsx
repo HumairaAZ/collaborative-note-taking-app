@@ -1,8 +1,9 @@
-import React from 'react';
-import { Container, AppBar, Toolbar, Typography, CssBaseline } from '@material-ui/core';
+import React, { Suspense, lazy } from 'react';
+import { Container, AppBar, Toolbar, Typography, CssBaseline, CircularProgress } from '@material-ui/core';
 import { ThemeProvider, createTheme, makeStyles } from '@material-ui/core/styles';
-import Note from './components/Note';
 import NotesProvider from './context/NotesContext';
+
+const Note = lazy(() => import('./components/Note'));
 
 const theme = createTheme({
   palette: {
@@ -39,7 +40,9 @@ const App: React.FC = () => {
               </Typography>
             </Toolbar>
           </AppBar>
-          <Note />
+          <Suspense fallback={<CircularProgress />}>
+            <Note />
+          </Suspense>
         </Container>
       </NotesProvider>
     </ThemeProvider>
