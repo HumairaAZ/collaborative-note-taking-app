@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Grid, CircularProgress, Fade, IconButton, Chip, Box, Tooltip, makeStyles } from '@material-ui/core';
+import { Button, TextField, Grid, CircularProgress, Fade, IconButton, Chip, Tooltip, makeStyles } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { db, auth } from '../firebase';
 import firebase from 'firebase/app';
@@ -12,6 +12,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     gap: '8px',
     flexWrap: 'wrap',
+    marginTop: theme.spacing(1),
+  },
+  noteContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  editingIndicator: {
     marginTop: theme.spacing(1),
   },
 }));
@@ -98,7 +106,7 @@ const Note: React.FC = () => {
       {notes.map((note) => (
         <Fade in={!loading} key={note.id}>
           <Grid item xs={12} sm={6} md={4}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className={classes.noteContainer}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -113,7 +121,7 @@ const Note: React.FC = () => {
                 <DeleteIcon />
               </IconButton>
             </div>
-            <Box className={classes.flexContainer}>
+            <div className={classes.flexContainer}>
               {note.tags.map((tag, index) => (
                 <Chip
                   key={index}
@@ -132,13 +140,13 @@ const Note: React.FC = () => {
                   }
                 }}
               />
-            </Box>
+            </div>
             {note.editingUsers.length > 0 && (
-              <Box mt={1}>
+              <div className={classes.editingIndicator}>
                 <Tooltip title="Currently editing">
                   <Chip label={`Editing by ${note.editingUsers.length} user(s)`} color="secondary" />
                 </Tooltip>
-              </Box>
+              </div>
             )}
           </Grid>
         </Fade>
