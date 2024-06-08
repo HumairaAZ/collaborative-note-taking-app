@@ -11,7 +11,7 @@ const Note: React.FC = () => {
     const unsubscribe = db.collection('notes').orderBy('timestamp', 'asc').onSnapshot(snapshot => {
       const notesData = snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        content: doc.data().content || '' // Ensure content field is present
       }));
       setNotes(notesData);
       setLoading(false);
