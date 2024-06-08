@@ -8,6 +8,12 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: theme.spacing(2),
   },
+  flexContainer: {
+    display: 'flex',
+    gap: '8px',
+    flexWrap: 'wrap',
+    marginTop: theme.spacing(1),
+  },
 }));
 
 const Note: React.FC = () => {
@@ -92,7 +98,7 @@ const Note: React.FC = () => {
       {notes.map((note) => (
         <Fade in={!loading} key={note.id}>
           <Grid item xs={12} sm={6} md={4}>
-            <div style={{ display: 'flex', alignItems: 'center', columnGap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -107,7 +113,7 @@ const Note: React.FC = () => {
                 <DeleteIcon />
               </IconButton>
             </div>
-            <Box display="flex" columnGap="8px" flexWrap="wrap" mt={1}>
+            <Box className={classes.flexContainer}>
               {note.tags.map((tag, index) => (
                 <Chip
                   key={index}
