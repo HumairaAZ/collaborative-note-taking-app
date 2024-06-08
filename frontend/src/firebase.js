@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/auth';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -16,5 +17,36 @@ if (!firebase.apps.length) {
 }
 
 const db = firebase.firestore();
+const auth = firebase.auth();
 
-export { db };
+auth.onAuthStateChanged(user => {
+  if (user) {
+    const userStatusFirestoreRef = db.collection('presence').doc(user.uid);
+
+    const isOfflineForFirestore = {
+      state: 'offline',
+      last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    const isOnlineForFirestore = {
+      state: 'online',
+      last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    firebase.firestore().doc('.info/connected').onSnapshot((snapshot) => {
+      if (snapshot.data().state === false) {
+        userStatusFirestoreRef.set(isOfflineForFirestore);
+        return;
+      }
+      userStatusFirestoreRef.set(isOnlineForFirestore);
+    });
+
+    window.addEventListener('beforeunload', () => {
+      userStatusFirestoreRef.set(isOfflineForFirestore);
+    });
+  }
+});
+
+const db = firebase.firestore();
+
+export { db, auth };
