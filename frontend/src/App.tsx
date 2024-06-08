@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Container, AppBar, Toolbar, Typography, CssBaseline, CircularProgress } from '@material-ui/core';
 import { ThemeProvider, createTheme, makeStyles } from '@material-ui/core/styles';
 import NotesProvider from './context/NotesContext';
+
+// Correct the lazy import
+const Note = lazy(() => import('./components/Note'));
 
 const theme = createTheme({
   palette: {
@@ -60,9 +63,9 @@ const App: React.FC = () => {
               </Typography>
             </Toolbar>
           </AppBar>
-          <React.Suspense fallback={<CircularProgress />}>
+          <Suspense fallback={<CircularProgress />}>
             <Note />
-          </React.Suspense>
+          </Suspense>
         </Container>
       </NotesProvider>
     </ThemeProvider>
