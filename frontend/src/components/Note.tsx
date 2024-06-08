@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Grid, CircularProgress, Fade, IconButton, Chip, Box, Tooltip } from '@material-ui/core';
+import { Button, TextField, Grid, CircularProgress, Fade, IconButton, Chip, Box, Tooltip, makeStyles } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { db, auth } from '../firebase';
 import firebase from 'firebase/app';
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    marginTop: theme.spacing(2),
+  },
+}));
+
 const Note: React.FC = () => {
   const [notes, setNotes] = useState<{ id: string, content: string, tags: string[], editingUsers: string[] }[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const classes = useStyles();
 
   useEffect(() => {
     const unsubscribe = db.collection('notes').orderBy('timestamp', 'asc').onSnapshot(snapshot => {
@@ -114,8 +121,8 @@ const Note: React.FC = () => {
                 placeholder="Add tag"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    addTag(note.id, e.currentTarget.value);
-                    e.currentTarget.value = '';
+                    addTag(note.id, (e.target as HTMLInputElement).value);
+                    (e.target as HTMLInputElement).value = '';
                   }
                 }}
               />
@@ -131,7 +138,7 @@ const Note: React.FC = () => {
         </Fade>
       ))}
       <Grid item xs={12}>
-        <Button variant="contained" color="primary" onClick={addNote} aria-label="Add note">
+        <Button variant="contained" color="primary" onClick={addNote} className={classes.button} aria-label="Add note">
           Add Note
         </Button>
       </Grid>
