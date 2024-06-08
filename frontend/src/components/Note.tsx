@@ -67,19 +67,15 @@ const Note: React.FC = () => {
   };
 
   const addTag = (id: string, tag: string) => {
-    const note = notes.find(note => note.id === id);
-    if (note) {
-      const updatedTags = [...note.tags, tag];
-      updateNote(id, note.content, updatedTags);
-    }
+    db.collection('notes').doc(id).update({
+      tags: firebase.firestore.FieldValue.arrayUnion(tag)
+    });
   };
 
   const removeTag = (id: string, tagToRemove: string) => {
-    const note = notes.find(note => note.id === id);
-    if (note) {
-      const updatedTags = note.tags.filter(tag => tag !== tagToRemove);
-      updateNote(id, note.content, updatedTags);
-    }
+    db.collection('notes').doc(id).update({
+      tags: firebase.firestore.FieldValue.arrayRemove(tagToRemove)
+    });
   };
 
   const handleFocus = (id: string) => {
