@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Grid, CircularProgress, Fade } from '@material-ui/core';
+import { Button, TextField, Grid, CircularProgress, Fade, IconButton } from '@material-ui/core';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 import { db } from '../firebase';
 import firebase from 'firebase/app';
 
@@ -30,6 +31,10 @@ const Note: React.FC = () => {
     db.collection('notes').doc(id).update({ content });
   };
 
+  const deleteNote = (id: string) => {
+    db.collection('notes').doc(id).delete();
+  };
+
   return (
     <Grid container spacing={2}>
       {loading && <CircularProgress />}
@@ -42,6 +47,9 @@ const Note: React.FC = () => {
               value={note.content}
               onChange={(e) => updateNote(note.id, e.target.value)}
             />
+            <IconButton aria-label="delete" onClick={() => deleteNote(note.id)}>
+              <DeleteIcon />
+            </IconButton>
           </Grid>
         </Fade>
       ))}
