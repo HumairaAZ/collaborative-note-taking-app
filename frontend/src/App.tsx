@@ -59,7 +59,7 @@ const App: React.FC = () => {
           <AppBar position="static">
             <Toolbar className={classes.toolbar}>
               <Typography variant="h6">
-                Collaborative Real-Time Note-Taking App
+                Collaborative Note-Taking App
               </Typography>
             </Toolbar>
           </AppBar>
