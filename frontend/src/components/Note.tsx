@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Grid, CircularProgress, Fade, IconButton, Chip, Tooltip, makeStyles } from '@material-ui/core';
+import { Button, TextField, Grid, CircularProgress, Fade, IconButton, Tooltip, makeStyles } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { db, auth } from '../firebase';
 import firebase from 'firebase/app';
@@ -7,12 +7,6 @@ import firebase from 'firebase/app';
 const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: theme.spacing(2),
-  },
-  flexContainer: {
-    display: 'flex',
-    gap: theme.spacing(1),
-    flexWrap: 'wrap',
-    marginTop: theme.spacing(1),
   },
   noteContainer: {
     display: 'flex',
@@ -29,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Note: React.FC = () => {
-  const [notes, setNotes] = useState<{ id: string, content: string, tags: string[], editingUsers: string[] }[]>([]);
+  const [notes, setNotes] = useState<{ id: string, content: string, editingUsers: string[] }[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<string | null>(null);
   const classes = useStyles();
@@ -39,7 +33,6 @@ const Note: React.FC = () => {
       const notesData = snapshot.docs.map(doc => ({
         id: doc.id,
         content: doc.data().content || '',
-        tags: doc.data().tags || [],
         editingUsers: doc.data().editingUsers || []
       }));
       setNotes(notesData);
@@ -56,7 +49,6 @@ const Note: React.FC = () => {
   const addNote = () => {
     db.collection('notes').add({
       content: '',
-      tags: [],
       editingUsers: [],
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
@@ -68,18 +60,6 @@ const Note: React.FC = () => {
 
   const deleteNote = (id: string) => {
     db.collection('notes').doc(id).delete();
-  };
-
-  const addTag = (id: string, tag: string) => {
-    db.collection('notes').doc(id).update({
-      tags: firebase.firestore.FieldValue.arrayUnion(tag)
-    });
-  };
-
-  const removeTag = (id: string, tagToRemove: string) => {
-    db.collection('notes').doc(id).update({
-      tags: firebase.firestore.FieldValue.arrayRemove(tagToRemove)
-    });
   };
 
   const handleFocus = (id: string) => {
@@ -121,26 +101,6 @@ const Note: React.FC = () => {
               <IconButton aria-label="Delete note" onClick={() => deleteNote(note.id)}>
                 <DeleteIcon />
               </IconButton>
-            </div>
-            <div className={classes.flexContainer}>
-              {note.tags.map((tag, index) => (
-                <Chip
-                  key={index}
-                  label={tag}
-                  onDelete={() => removeTag(note.id, tag)}
-                />
-              ))}
-              <TextField
-                variant="outlined"
-                size="small"
-                placeholder="Add tag"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    addTag(note.id, (e.target as HTMLInputElement).value);
-                    (e.target as HTMLInputElement).value = '';
-                  }
-                }}
-              />
             </div>
             {note.editingUsers.length > 0 && (
               <div className={classes.editingIndicator}>
