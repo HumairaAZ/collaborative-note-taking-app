@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Grid, CircularProgress, Fade, IconButton, Box } from '@material-ui/core';
+import { Button, TextField, Grid, CircularProgress, Fade, IconButton } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { db } from '../firebase';
 import firebase from 'firebase/app';
@@ -41,7 +41,7 @@ const Note: React.FC = () => {
       {notes.map((note) => (
         <Fade in={!loading} key={note.id}>
           <Grid item xs={12} sm={6} md={4}>
-            <Box display="flex" alignItems="center">
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -51,7 +51,7 @@ const Note: React.FC = () => {
               <IconButton aria-label="delete" onClick={() => deleteNote(note.id)}>
                 <DeleteIcon />
               </IconButton>
-            </Box>
+            </div>
           </Grid>
         </Fade>
       ))}
