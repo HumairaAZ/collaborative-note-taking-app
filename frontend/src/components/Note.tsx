@@ -105,7 +105,7 @@ const Note: React.FC = () => {
             {note.editingUsers.length > 0 && (
               <div className={classes.editingIndicator}>
                 <Tooltip title="Currently editing">
-                  <Chip label={`Editing by ${note.editingUsers.length} user(s)`} color="secondary" />
+                  <span>Editing by {note.editingUsers.length} user(s)</span>
                 </Tooltip>
               </div>
             )}
