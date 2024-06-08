@@ -41,14 +41,16 @@ const Note: React.FC = () => {
       {notes.map((note) => (
         <Fade in={!loading} key={note.id}>
           <Grid item xs={12} sm={6} md={4}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <TextField
                 fullWidth
                 variant="outlined"
                 value={note.content}
                 onChange={(e) => updateNote(note.id, e.target.value)}
+                aria-label="Note content"
+                inputProps={{ style: { color: '#333' } }}
               />
-              <IconButton aria-label="delete" onClick={() => deleteNote(note.id)}>
+              <IconButton aria-label="Delete note" onClick={() => deleteNote(note.id)}>
                 <DeleteIcon />
               </IconButton>
             </div>
@@ -56,7 +58,7 @@ const Note: React.FC = () => {
         </Fade>
       ))}
       <Grid item xs={12}>
-        <Button variant="contained" color="primary" onClick={addNote}>
+        <Button variant="contained" color="primary" onClick={addNote} className={classes.button} aria-label="Add note">
           Add Note
         </Button>
       </Grid>
