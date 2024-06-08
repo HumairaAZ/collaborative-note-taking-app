@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Grid, CircularProgress, Fade, IconButton } from '@material-ui/core';
+import { Button, TextField, Grid, CircularProgress, Fade, IconButton, makeStyles } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { db } from '../firebase';
 import firebase from 'firebase/app';
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    marginTop: theme.spacing(2),
+  },
+}));
+
 const Note: React.FC = () => {
   const [notes, setNotes] = useState<{ id: string, content: string }[]>([]);
   const [loading, setLoading] = useState(true);
+  const classes = useStyles();
 
   useEffect(() => {
     const unsubscribe = db.collection('notes').orderBy('timestamp', 'asc').onSnapshot(snapshot => {
