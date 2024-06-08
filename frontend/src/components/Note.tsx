@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Grid, CircularProgress } from '@material-ui/core';
+import { Button, TextField, Grid, CircularProgress, Fade } from '@material-ui/core';
 import { db } from '../firebase';
 import firebase from 'firebase/app';
 
@@ -34,14 +34,16 @@ const Note: React.FC = () => {
     <Grid container spacing={2}>
       {loading && <CircularProgress />}
       {notes.map((note) => (
-        <Grid item xs={12} sm={6} md={4} key={note.id}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            value={note.content}
-            onChange={(e) => updateNote(note.id, e.target.value)}
-          />
-        </Grid>
+        <Fade in={!loading} key={note.id}>
+          <Grid item xs={12} sm={6} md={4}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              value={note.content}
+              onChange={(e) => updateNote(note.id, e.target.value)}
+            />
+          </Grid>
+        </Fade>
       ))}
       <Grid item xs={12}>
         <Button variant="contained" color="primary" onClick={addNote}>
