@@ -10,17 +10,21 @@ const useStyles = makeStyles((theme) => ({
   },
   flexContainer: {
     display: 'flex',
-    gap: '8px',
+    gap: theme.spacing(1),
     flexWrap: 'wrap',
     marginTop: theme.spacing(1),
   },
   noteContainer: {
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: theme.spacing(1),
   },
   editingIndicator: {
     marginTop: theme.spacing(1),
+  },
+  textField: {
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.text.primary,
   },
 }));
 
@@ -112,6 +116,7 @@ const Note: React.FC = () => {
                 inputProps={{ style: { color: '#333' } }}
                 onFocus={() => handleFocus(note.id)}
                 onBlur={() => handleBlur(note.id)}
+                className={classes.textField}
               />
               <IconButton aria-label="Delete note" onClick={() => deleteNote(note.id)}>
                 <DeleteIcon />
